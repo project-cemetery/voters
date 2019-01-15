@@ -1,0 +1,15 @@
+language: node_js
+node_js:
+- '8'
+- '10'
+cache: yarn
+script: yarn lint
+deploy:
+  skip_cleanup: true
+  provider: npm
+  email: igor@kamyshev.me
+  api_key:
+    secure: omqkwXcxRczZsIPGFymqy9CxsSK55G32CldmWefjzGw8DVAGRLGP3tLymBpSryuymrd/XE06VsKo65TXVR4FCvDNs0/+XSFno9rWh/Tdx6D/dmqsTZ/WkwiM1XJ1wrPpFzAN8QCGQPUuQO3jQvem58ILBdUj4jlH4QujFkC501e0ibHWDY2pr5/gME4Fmzu159CUxIhQwxjyHFOLoYFq++dc0jnok7hl5w1TY7F+/mcvq5LGeHAbMhSrpDX/8AccBzLih6JY3syb4kd06NWSBSYB0Wk0dU5WJfawQe8MQRvUNgQVnXXerzv6hqSQpKytu5v6Cg4j/cCpYKRk/QT3Pd7Z+vsPFWNK05qarxI2J0jIXIn/ad2s89if++JCp+uS4CvtlbxMq+/tRa6vYbIn4LQxuHWvRpkp+47ya+GeoVjrd4FA3MmSqD2uI3/rTqwG4afcZ5mGFvBbm1OqFaLBCCujT58euX6JDdeuFpQhup0ztjTA4CtlVBFWikZ6iAUXkkGxjdO2VE9/U1QVEw0jhL/n9FsoxtKPnGN0rSWGzfW44U+TG9conFAl7NantaTVSOl2pXHaBiUEFbbEygSqEsy+uOEe1Y/P2Q3lVAn4r7/SIes88PVlTAtjCocJGk2k+J1OlvGcIQgkpZPfqb35geBS4SXKgLhTP21X+DJDcPc=
+  on:
+    tags: true
+    repo: solid-soda/voters

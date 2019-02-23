@@ -8,36 +8,22 @@
     "ci": "yarn s lint && yarn types",
     "prepare": "yarn build",
     "types": "tsc --noEmit",
-    "s": "yarn soda"
+    "s": "yarn soda",
+    "postinstall": "yarn soda post-install"
   },
-  "dependencies": {
-    "@solid-soda/scripts": "^1.0.7"
-  },
+  "dependencies": {},
   "devDependencies": {
+    "@solid-soda/scripts": "^1.1.1",
     "rimraf": "^2.6.2",
     "typescript": "^3.2.2"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged && yarn types",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
-  },
-  "lint-staged": {
-    "*.{ts,tsx,js,jsx}": [
-      "yarn soda lint"
-    ],
-    "*.{js,jsx,ts,tsx,css,json}": [
-      "yarn soda pretty",
-      "git add"
-    ]
-  },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
-  },
   "publishConfig": {
     "access": "public"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn soda lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS -x '@commitlint/config-conventional'"
+    }
   }
 }

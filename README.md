@@ -2,7 +2,7 @@
 
 Security voters are the most granular way of checking permissions (e.g. "can this specific user edit the given item?").
 
-In order to use voters, you have to understand how you can work with them. All voters are called each time you call `denyAccessUnlessGranted` method of `SecurityVotersUnity`.
+To get access decision just call call `denyAccessUnlessGranted` method of `SecurityVotersUnity`.
 
 Ultimately, `SecurityVotersUnity` takes the responses from all voters and makes the final decision (to allow or deny access to the resource) according to the strategy defined in the application, which can be: affirmative, consensus or unanimous.
 
@@ -16,7 +16,7 @@ Ultimately, `SecurityVotersUnity` takes the responses from all voters and makes 
 
 A voter needs to implement `SecutiryVoter` interface.
 
-Example: Suppose the logic to decide if a user can "view" a Post object is pretty complex. For example, a admin User can always view a Post. And if a Post is marked as "public", anyone can view it. A voter for this situation would look like this:
+Example: Suppose the logic to decide if a user can "view" the Post object is pretty complex. For example, an admin User can always view a Post. And if the Post is marked as "public", anyone can view it. A voter for this situation would look like this:
 
 ```js
 class PostVoter {
@@ -37,20 +37,20 @@ If you use TypeScript, you can import interface and implement it explicitly.
 
 ### Checking for Access
 
-Create
-
 ```js
 import { SecurityVotersUnity } from '@solid-soda/voters'
 
+// Create Unity for voting
 const unity = new SecurityVotersUnity(
-  [ new MyVoter() ],
-  Strategy.Affirmative,
-  true,
+  [ new PostVoter() ], // all voters for the app
+  Strategy.Affirmative, // decision dtrategy
+  true, // allow if all voters abstain
 )
 
 // Post is a just class, does not matter
 const post = new Post(1)
 
+// Make decision
 unity.denyAccessUnlessGranted('edit', post, { login: 'admin' })
 ```
 
@@ -58,10 +58,11 @@ The `denyAccessUnlessGranted` method calls out to the "voter" system. If system 
 
 ## Decision making
 
-+ `SecurityVotersUnity` find all voters, which `supports` provided `attribute` and `subject`;
-+ `SecurityVotersUnity` get answers from `voteOnAttribute` method for each voter;
-+ `SecurityVotersUnity` apply to votes Strategy;
-+ if all voters abstain from voting `SecurityVotersUnity` use `allowIfAllAbstain` parameter to make decision.
+`SecurityVotersUnity`
++ finds all voters, which `supports` provided `attribute` and `subject`;
++ get answers from `voteOnAttribute` method for each voter;
++  to votes Strategy;
++ if all voters abstain from voting it use `allowIfAllAbstain` parameter to make decision.
 
 ### Access Decision Strategy
 
@@ -73,14 +74,4 @@ To handle these cases, the access decision manager uses an access decision strat
 + `Strategy.Consensus`, This grants access if there are more voters granting access than denying;
 + `Strategy.Unanimous`, this only grants access if there is no voter denying access.
 
-If all voters abstained from voting, the decision is based on the `allowIfAllAbstain` config option (the third argument to the constructor).
-
-In the above scenario, both voters should grant access in order to grant access to the user to read the post. In this case we should use `Strategy.Unanimous`. You can set this in the `SecurityVotersUnity` constructor:
-
-```js
-const unity = new SecurityVotersUnity(
-  [ new MyVoter() ],
-  Strategy.Unanimous,
-  false,
-)
-```
+If all voters abstained from voting, the decision is based on the `allowIfAllAbstain` config option (the third argument of the constructor).
